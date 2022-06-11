@@ -9,7 +9,6 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <p>
           Edit <code className=" text-yellow-400">src/App.tsx</code> and save to
-          reload.
         </p>
         <a
           className="text-red-600"
