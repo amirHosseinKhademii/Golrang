@@ -18,11 +18,11 @@ export const Primary = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Primary.args = {
   children: "Subscribe",
-  golrang: "primary",
+  colorType: "primary",
 };
 
 export const Secondary = Template.bind({});
 Secondary.args = {
   children: "Subscribe",
-  golrang: "secondary",
+  colorType: "secondary",
 };

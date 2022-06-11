@@ -1,17 +1,17 @@
 import { ComponentProps } from "react";
 
 export type TButton = {
-  golrang: "primary" | "secondary";
+  colorType: "primary" | "secondary";
 } & ComponentProps<"button">;
 
 const joiner = (...classes: any) => classes.filter(Boolean).join(" ");
 
-export const Button = ({ children, onClick, golrang, ...rest }: TButton) => {
+export const Button = ({ children, onClick, colorType, ...rest }: TButton) => {
   return (
     <button
       className={joiner(
         "rounded p-3 text-white",
-        golrang === "primary" ? "bg-cyan-300 " : "bg-gray-400"
+        colorType === "primary" ? "bg-cyan-300 " : "bg-gray-400"
       )}
       {...rest}
     >
