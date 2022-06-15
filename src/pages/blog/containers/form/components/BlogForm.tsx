@@ -3,7 +3,7 @@ import { Input } from "components/input/Input";
 
 export const BlogForm = () => {
   return (
-    <div className="flex items-center space-x-4">
+    <div className="flex items-center space-x-4 justify-center">
       <Input name="Test" />
       <Button colorType="primary">Subscribe</Button>
     </div>
