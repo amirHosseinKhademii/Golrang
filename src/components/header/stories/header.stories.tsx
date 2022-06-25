@@ -1,12 +1,12 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import Header from "../Header";
+import Header, {THeader} from "../Header";
 
 export default {
     title: 'Components/Header',
     component: Header,
   } as ComponentMeta<typeof Header>;
 
-const Template: ComponentStory<typeof Header> = (args) => <Header {...args} />;
+const Template: ComponentStory<typeof Header> = (args: THeader) => <Header {...args} />;
 
 export const Black = Template.bind({});
 Black.args = {

@@ -1,12 +1,12 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import Title from "../Title";
+import Title, {TTitle} from "../Title";
 
 export default {
     title: 'Components/Title',
     component: Title,
   } as ComponentMeta<typeof Title>;
 
-const Template: ComponentStory<typeof Title> = (args) => <Title {...args} />;
+const Template: ComponentStory<typeof Title> = (args: TTitle) => <Title {...args} />;
 
 export const Black = Template.bind({});
 Black.args = {

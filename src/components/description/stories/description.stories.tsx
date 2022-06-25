@@ -1,12 +1,12 @@
 import { ComponentMeta, ComponentStory } from "@storybook/react";
-import Description from "../Description";
+import Description, {TDescription} from "../Description";
 
 export default {
     title: 'Components/Description',
     component: Description,
   } as ComponentMeta<typeof Description>;
 
-const Template: ComponentStory<typeof Description> = (args) => <Description {...args} />;
+const Template: ComponentStory<typeof Description> = (args: TDescription) => <Description {...args} />;
 
 export const Black = Template.bind({});
 Black.args = {
