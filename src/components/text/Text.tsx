@@ -1,11 +1,11 @@
 import { ComponentProps } from "react";
 import { joiner } from "utils";
 
-export type TSpan = {
-  classType: "stitle" | "sprice";
+export type TText = {
+  classType?: "stitle" | "sprice";
 } & ComponentProps<"span">;
 
-export const Span = ({ children, classType }: TSpan) => {
+export const Text = ({ children, classType }: TText) => {
   return (
     <>
       <span

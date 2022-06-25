@@ -1,7 +1,6 @@
-import { Button } from "components/button/Button";
 import { Img } from "components/img/Img";
-import { Input } from "components/input/Input";
-import { Span } from "components/span/Span";
+
+import { Text } from "components/text/Text";
 import { Svg } from "components/svg/Svg";
 
 export const Card = () => {
@@ -34,10 +33,10 @@ export const Card = () => {
         <Img src={src} alt={alt}></Img>
 
         <div className="relative text-white px-6 pb-6 mt-6">
-          <Span classType="stitle">Indoor</Span>
+          <Text classType="stitle">Indoor</Text>
           <div className="flex justify-between">
-            <span className="block font-semibold text-xl">Peace Lily</span>
-            <Span classType="sprice">$36.00</Span>
+            <Text className="block font-semibold text-xl">Peace Lily</Text>
+            <Text classType="sprice">$36.00</Text>
           </div>
         </div>
       </div>
