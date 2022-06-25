@@ -1,4 +1,5 @@
 import { ComponentStory, ComponentMeta } from "@storybook/react";
+import { ElementType } from "react";
 
 import { Text, TText } from "../Text";
 
@@ -6,18 +7,18 @@ import { Text, TText } from "../Text";
 export default {
   title: "Components/Text",
   component: Text,
-  // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
 } as ComponentMeta<typeof Text>;
 
-// More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Text> = (args: TText) => (
-  <Text {...args} />
-);
+const Template: ComponentStory<typeof Text> = <T extends ElementType>(
+  args: TText<T>
+) => <Text {...args} />;
 
 export const Stitle = Template.bind({});
 Stitle.args = {
   children: "100$",
   classType: "stitle",
+  as: "a",
+  href: "#",
 };
 
 export const Sprice = Template.bind({});
