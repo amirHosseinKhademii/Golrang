@@ -10,8 +10,8 @@ export const Button = ({ children, onClick, colorType, ...rest }: TButton) => {
   return (
     <button
       className={joiner(
-        "rounded p-3 text-white",
-        colorType === "primary" ? "bg-cyan-300 " : "bg-gray-400"
+        "rounded px-3 py-2 text-white font-semibold",
+        colorType === "primary" ? "bg-blue-500 " : "bg-gray-400"
       )}
       {...rest}
     >
