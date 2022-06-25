@@ -1,10 +1,9 @@
 import { ComponentProps } from "react";
+import { joiner } from "utils";
 
 export type TButton = {
   colorType: "primary" | "secondary";
 } & ComponentProps<"button">;
-
-const joiner = (...classes: any) => classes.filter(Boolean).join(" ");
 
 export const Button = ({ children, onClick, colorType, ...rest }: TButton) => {
   return (
