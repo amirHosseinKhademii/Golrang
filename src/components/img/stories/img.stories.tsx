@@ -10,10 +10,10 @@ export default {
 } as ComponentMeta<typeof Img>;
 
 // More on component templates: https://storybook.js.org/docs/react/writing-stories/introduction#using-args
-const Template: ComponentStory<typeof Img> = (args: TImg) => (
-  <Img {...args} />
-);
+const Template: ComponentStory<typeof Img> = (args: TImg) => <Img {...args} />;
 
 export const Default = Template.bind({});
 // More on args: https://storybook.js.org/docs/react/writing-stories/args
-Default.args = {};
+Default.args = {
+  src: "https://via.placeholder.com/300x200",
+};
