@@ -1,6 +1,5 @@
 import { ComponentProps } from "react"
-
-const joiner = (...classes: any) => classes.filter(Boolean).join(" ");
+import {joiner} from '../../../utils';
 
 export type TTitle = ComponentProps<'h3'> & {size: 'base' | 'lg', color: 'black' | 'gray'}
 const Title = ({children, size, color}: TTitle) => {

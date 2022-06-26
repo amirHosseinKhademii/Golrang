@@ -1,6 +1,5 @@
 import { ComponentProps } from "react"
-
-const joiner = (...classes: any) => classes.filter(Boolean).join(" ");
+import {joiner} from '../../../utils';
 
 export type TSubHeader = ComponentProps<'h3'> & {size: 'sm' | 'lg', color: 'gray' | 'black'}
 
