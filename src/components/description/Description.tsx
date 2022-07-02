@@ -1,6 +1,5 @@
 import { ComponentProps } from "react"
-
-const joiner = (...classes: any) => classes.filter(Boolean).join(" ");
+import {joiner} from '../../../utils';
 
 export type TDescription = ComponentProps<'p'> & {size: 'base' | 'sm', color: 'black' | 'gray'}
 const Description = ({children, size, color}: TDescription) => {

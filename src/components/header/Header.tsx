@@ -1,6 +1,5 @@
 import { ComponentProps } from "react"
-
-const joiner = (...classes: any) => classes.filter(Boolean).join(" ");
+import {joiner} from '../../../utils';
 
 export type THeader = ComponentProps<'h1'> & {size: 'xl' | '2xl', color: 'gray' | 'black'}
 

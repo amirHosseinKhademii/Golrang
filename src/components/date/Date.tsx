@@ -1,10 +1,9 @@
 import { ComponentProps } from "react";
+import {joiner} from '../../../utils';
 
 export type TDate = {
   colorType: "active" | "deactive";
 } & ComponentProps<"span">;
-
-const joiner = (...classes: any) => classes.filter(Boolean).join(" ");
 
 export const Date = ({ children, colorType, ...rest }: TDate) => {
   return (
