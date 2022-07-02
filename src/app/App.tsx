@@ -1,3 +1,9 @@
+import Posts from "components/posts/Posts";
+
 export const App = () => {
-  return <div> test</div>;
+  return <Posts/>
+  
+  
+  
+  // <div> test</div>;
 };
