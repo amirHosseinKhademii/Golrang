@@ -1,58 +1,38 @@
-import { TRequestInfo, useRequest } from "../hooks/useRequest";
+import { useService } from "hooks/use-service";
 
-type TPost = {
-  userId: number;
-  id: number;
-  title: string;
-  body: string;
-};
+const fetcher = (url: string): Promise<{ name: string }[]> =>
+  fetch(url)
+    .then((res) => res.json())
+    .catch((er) => {
+      throw er;
+    });
 
-const reqObj: TRequestInfo = {
-  method: "GET",
-  url: "https://jsonplaceholder.typicode.com/posts?limit=10",
-};
+const poster = (url: string, body: any): Promise<{ name: string }[]> =>
+  fetch(url, { method: "POST", body })
+    .then((res) => res.json())
+    .catch((er) => {
+      throw er;
+    });
+
+type TData = { name: string };
+type TError = { message: string };
 
 export const App = () => {
-  const { data, isFetching, error, handleRequest } =
-    useRequest<TPost[], { message: string }>(reqObj);
+  const { data, error, isLoading, mutate } = useService<TData[], TError>(() =>
+    fetcher("https://api.github.com/users/octocat")
+  );
 
-  const addPostHandler = (e: any) => {
-    const postObj = {
-      userId: 1,
-      title: e.target.value,
-      body: "body content here...",
-    };
+  const handlePost = () =>
+    poster("https://api.github.com/users/octocat", {
+      title: "hello",
+      body: "test",
+    });
 
-    handleRequest({ requestBody: postObj });
-  };
-
-  if (isFetching) {
-    return <p>fetching data...!</p>;
-  } else if (error) {
-    return <p>error: {error?.message}</p>;
-  }
   return (
     <div>
-      <input
-        placeholder="Enter post title"
-        style={{ border: "1px solid black" }}
-      />
-      <button
-        onClick={(e) => addPostHandler(e)}
-        style={{
-          border: "1px solid black",
-          padding: "0 10px",
-          background: "#ccc",
-        }}
-      >
-        Add Post
-      </button>
-      <hr />
-      <ul>
-        {data?.map((item: TPost) => (
-          <li key={item.id}>{item.title}</li>
-        ))}
-      </ul>
+      {data?.map((post) => (
+        <>{post.name}</>
+      ))}
     </div>
   );
 };
