@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import useRequest from "../hooks/useRequest";
+import { TRequestInfo, useRequest } from "../hooks/useRequest";
 
 type TPost = {
   userId: number;
@@ -8,19 +7,14 @@ type TPost = {
   body: string;
 };
 
+const reqObj: TRequestInfo = {
+  method: "GET",
+  url: "https://jsonplaceholder.typicode.com/posts?limit=10",
+};
+
 export const App = () => {
-  const [posts, setPosts] = useState<TPost[]>([]);
-  const reqObj = {
-    Method: "GET",
-    Url: "https://jsonplaceholder.typicode.com/posts?limit=10",
-  };
-
-  const [responseInfo, isFetching] = useRequest(reqObj);
-
-  useEffect(() => {
-    if (isFetching === false && responseInfo && responseInfo.data)
-      setPosts(responseInfo.data);
-  }, [responseInfo]);
+  const { data, isFetching, error, handleRequest } =
+    useRequest<TPost[], { message: string }>(reqObj);
 
   const addPostHandler = (e: any) => {
     const postObj = {
@@ -28,30 +22,36 @@ export const App = () => {
       title: e.target.value,
       body: "body content here...",
     };
-    const reqObj = {
-      body: postObj,
-      Headers: { "Content-type": "application/json; charset=UTF-8" },
-      Method: "POST",
-      Url: "https://jsonplaceholder.typicode.com/posts?limit=10",
-    };
-    // const [responseInfo, isFetching] = useRequest(reqObj);
-    // console.log(responseInfo);
+
+    handleRequest({ requestBody: postObj });
   };
 
   if (isFetching) {
     return <p>fetching data...!</p>;
+  } else if (error) {
+    return <p>error: {error?.message}</p>;
   }
   return (
     <div>
-      {" "}
-      <input placeholder="Enter post title" style={{border: '1px solid black'}} />
-      <button onClick={(e) => addPostHandler(e)} style={{border: '1px solid black', padding: '0 10px', background: '#ccc'}}>Add Post</button>
+      <input
+        placeholder="Enter post title"
+        style={{ border: "1px solid black" }}
+      />
+      <button
+        onClick={(e) => addPostHandler(e)}
+        style={{
+          border: "1px solid black",
+          padding: "0 10px",
+          background: "#ccc",
+        }}
+      >
+        Add Post
+      </button>
       <hr />
       <ul>
-        {posts &&
-          posts.map((item: TPost) => {
-            return <li key={item.id}>{item.title}</li>;
-          })}
+        {data?.map((item: TPost) => (
+          <li key={item.id}>{item.title}</li>
+        ))}
       </ul>
     </div>
   );

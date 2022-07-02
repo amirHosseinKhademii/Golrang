@@ -1,15 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 
-type TRequestInfo = {
-  Headers?: {};
-  Method?: string; // "GET" or "PUT" or "POST" or "PATCH"
-  Url: string;
-  RequestBody?: object;
-};
-
-type TResponseInfo = {
-  data: any;
-  hasError: boolean;
+export type TRequestInfo = {
+  headers?: Record<string, any>;
+  method?: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
+  url: string;
 };
 
 enum HttpStatusCode {
@@ -18,77 +12,70 @@ enum HttpStatusCode {
   SUCCESS_NO_CONTENT = 204,
 }
 
-const useRequest = (props: TRequestInfo): [TResponseInfo, boolean] => {
-  const [isFetching, setIsFetching] = useState(false);
-  const [requestInfo, setRequestInfo] = useState(props);
-  const [responseInfo, setResponseInfo] = useState<TResponseInfo>(
-    {} as TResponseInfo
-  );
-
-  useEffect(() => {
-    const promise = new Promise((resolve: any, reject: any) => {
-      const fetchURL = requestInfo.Url;
-      const fetchData = {
-        ...(requestInfo.Method !== "GET" && {
-          body: requestInfo.RequestBody
-            ? JSON.stringify(requestInfo.RequestBody)
-            : "",
-        }),
-        headers: requestInfo.Headers ? requestInfo.Headers : {},
-        method: requestInfo.Method,
-      };
-
-      fetch(fetchURL, fetchData)
-        .then((response: Response) => {
-          switch (response.status) {
-            case HttpStatusCode.OK:
-            case HttpStatusCode.CREATED:
-            case HttpStatusCode.SUCCESS_NO_CONTENT:
-              response
-                .clone()
-                .json()
-                .then((data: any) => {
-                  resolve(data);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  resolve(null);
-                });
-              break;
-            default:
-              response
-                .clone()
-                .json()
-                .then((data: any) => {
-                  reject(data);
-                })
-                .catch((err) => {
-                  console.log(err);
-                  reject(null);
-                });
-          }
-        })
-        .catch((error: Error) => {
-          console.log(error);
-          reject(error);
-        });
-    });
-
-    setIsFetching(true);
-
-    promise.then(
-      (httpResponse: any) => {
-        setResponseInfo({ data: httpResponse, hasError: false });
-        setIsFetching(false);
-      },
-      (error: Error) => {
-        setResponseInfo({ data: error, hasError: true });
-        setIsFetching(false);
-      }
-    );
-  }, [requestInfo]);
-
-  return [responseInfo, isFetching];
+type TRequestHook<T, G> = {
+  data: T;
+  error: G;
+  isFetching: boolean;
+  handleRequest: ({
+    signal,
+    requestBody,
+  }: {
+    signal?: AbortSignal;
+    requestBody?: any;
+  }) => Promise<void>;
 };
 
-export default useRequest;
+export const useRequest = <T extends any, G extends any>(
+  props: TRequestInfo
+): TRequestHook<T, G> => {
+  const [isFetching, setIsFetching] = useState(false);
+  const [responseInfo, setResponseInfo] = useState({} as { data: T });
+  const [error, setError] = useState(undefined as G);
+  const unmounte = useRef(false);
+
+  const handleRequest = async ({
+    signal,
+    requestBody,
+  }: {
+    signal?: AbortSignal;
+    requestBody?: any;
+  }) => {
+    setIsFetching(true);
+    try {
+      const data = await service({ ...props, signal, requestBody });
+      setResponseInfo((prev) => ({ ...prev, data }));
+    } catch (error: any) {
+      setError(error);
+    } finally {
+      setIsFetching(false);
+    }
+  };
+
+  useEffect(() => {
+    const controller = new AbortController();
+    handleRequest({ signal: controller?.signal });
+    return () => {
+      if (unmounte.current) {
+        controller?.abort();
+      }
+      unmounte.current = true;
+    };
+  }, [props]);
+
+  return {
+    data: responseInfo?.data,
+    error,
+    isFetching,
+    handleRequest,
+  };
+};
+
+const service = (
+  props: TRequestInfo & { signal?: AbortSignal; requestBody?: any }
+) =>
+  fetch(props.url, { ...props, body: JSON.stringify(props?.requestBody) })
+    .then((res) => res.json())
+    .then((res) => res)
+    .catch((err) => {
+      throw err;
+    });
